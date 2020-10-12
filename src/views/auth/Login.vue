@@ -67,19 +67,12 @@ export default {
     }
   },
   computed: {
-    //   [1]
-    // dataName() {
-    //   return this.$store.state.name
-    // }
-    // [2]
-    // ...mapState({ dataName: 'name' })
-    // [3]
     ...mapState(['name'])
   },
   methods: {
     ...mapActions(['login']),
     onSubmit() {
-      //   console.log(this.form)
+      console.log(this.form)
       this.login(this.form)
         .then((result) => {
           console.log(result)

@@ -2,6 +2,7 @@ import axios from 'axios'
 import router from '../../router/index'
 export default {
   state: {
+    urlAPI: process.env.VUE_APP_URL,
     user: {},
     token: localStorage.getItem('token') || null
   },
@@ -23,7 +24,7 @@ export default {
     login(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${process.env.VUE_APP_URL}users/login`, payload)
+          .post(`${context.state.urlAPI}users/login`, payload)
           .then(response => {
             console.log(response)
             context.commit('setUser', response.data.data)
@@ -31,14 +32,18 @@ export default {
             resolve(response.data)
           })
           .catch(error => {
-            reject(error.response)
+            if (error === undefined) {
+              alert('tidak dapat masuk')
+            } else {
+              reject(error.response)
+            }
           })
       })
     },
     register(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${process.env.VUE_APP_URL}users/register`, payload)
+          .post(`${context.state.urlAPI}users/register`, payload)
           .then(response => {
             console.log(response.data)
             resolve(response.data)
@@ -51,12 +56,12 @@ export default {
     interceptorRequest(context) {
       console.log('interceptor works!')
       axios.interceptors.request.use(
-        function(config) {
+        function (config) {
           config.headers.authorization = `Bearer ${context.state.token}`
           // Do something before request is sent
           return config
         },
-        function(error) {
+        function (error) {
           // Do something with request error
           return Promise.reject(error)
         }
@@ -69,13 +74,13 @@ export default {
     },
     interceptorResponse(context) {
       axios.interceptors.response.use(
-        function(response) {
+        function (response) {
           // Any status code that lie within the range of 2xx cause this function to trigger
           // Do something with response data
           return response
         },
-        function(error) {
-          console.log(error.response)
+        function (error) {
+          console.log(error.response.data)
           if (error.response.status === 403) {
             if (
               error.response.data.msg === 'invalid token' ||

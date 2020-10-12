@@ -14,14 +14,14 @@
               shadow
             >
               <div class="px-3 py-2">
-                <img src="../assets/account.png" style="max-width:50px" alt />
+                <img src="../assets/account.png" style="max-width: 50px" alt />
                 <h5>{{ user.user_name }}</h5>
                 <hr />
                 <div class="side mt-2">
                   <router-link to="/">
                     <img
                       src="../assets/fork32.png"
-                      style="max-width:50px"
+                      style="max-width: 50px"
                       alt
                     /> </router-link
                   >Food Items
@@ -30,7 +30,7 @@
                   <router-link to="/History">
                     <img
                       src="../assets/clipboard32.png"
-                      style="max-width:50px"
+                      style="max-width: 50px"
                       alt
                     /> </router-link
                   >History
@@ -42,7 +42,7 @@
                 >
                   <img
                     src="../assets/control32.png"
-                    style="max-width:50px;"
+                    style="max-width: 50px"
                     alt
                   />
                   User Control
@@ -50,7 +50,7 @@
                 <div class="side" @click="$bvModal.show('modalLogout')">
                   <img
                     src="../assets/logout32.png"
-                    style="max-width:50px;"
+                    style="max-width: 50px"
                     alt
                   />
                   Logout
@@ -123,10 +123,10 @@
                 <b-col sm="12" class="mt-5">
                   <div class="revenue">
                     <b-row class="p-4">
-                      <b-col sm="10" class="text-left">
+                      <b-col cols="6" sm="10" class="text-left">
                         <h3>Revenue</h3>
                       </b-col>
-                      <b-col sm="2" class="text-center">
+                      <b-col cols="6" sm="2" class="text-center">
                         <b-dropdown variant="info" text="Filter By">
                           <b-dropdown-item @click="getHistory()"
                             >Month</b-dropdown-item
@@ -159,10 +159,10 @@
                 <b-col xl="12" class="mt-5">
                   <div class="recent">
                     <b-row class="p-4">
-                      <b-col sm="10" class="text-left">
+                      <b-col cols="6" sm="10" class="text-left">
                         <h3>Recent Order</h3>
                       </b-col>
-                      <b-col sm="2" class="text-center">
+                      <b-col cols="6" sm="2" class="text-center">
                         <div>
                           <b-dropdown
                             variant="info"
@@ -251,15 +251,15 @@ export default {
         .get(
           'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=DESC'
         )
-        .then(response => {
+        .then((response) => {
           const month = response.data.pagination.getMonth
-          month.map(item => this.chartMonth.push([item.date, item.subtotal]))
+          month.map((item) => this.chartMonth.push([item.date, item.subtotal]))
           console.log(response.data.pagination.getMonth)
           this.yearIncome = response.data.pagination.getYear[0].subtotal
           this.recent = response.data.data
           this.todayIncome = response.data.pagination.getToday[0].subtotal
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     },
@@ -270,34 +270,34 @@ export default {
         .get(
           'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=DESC'
         )
-        .then(response => {
+        .then((response) => {
           const year = response.data.pagination.getYear
-          year.map(item => this.chartYear.push([item.month, item.subtotal]))
+          year.map((item) => this.chartYear.push([item.month, item.subtotal]))
           // this.todayIncome = response.data.pagination.getToday[0].subtotal
           // console.log(this.chartYear)
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     },
     getTotalOrder() {
       axios
         .get('http://127.0.0.1:3001/history/order/total')
-        .then(response => {
+        .then((response) => {
           this.orders = response.data.data[0].totalOrders
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     },
     recentOrderHistory() {
       axios
         .get('http://127.0.0.1:3001/history/order/recent')
-        .then(response => {
+        .then((response) => {
           // this.recent = response.data.data
           // console.log(this.recent)
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     }

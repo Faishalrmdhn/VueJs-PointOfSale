@@ -472,12 +472,12 @@
                     </b-row>
                     <div class="modals">Payment : Cash</div>
                     <b-row>
-                      <b-col @click="cancel()">
+                      <b-col @click="$bvModal.hide('checkOutModals')">
                         <b-button
                           class="mt-3"
                           variant="info"
                           block
-                          @click="$bvModal.hide('checkOutModals')"
+                          @click="downloadPDF()"
                           >Print</b-button
                         >
                       </b-col>
@@ -495,7 +495,7 @@
 
                 <b-row>
                   <b-button variant="warning" block @click="cancel()"
-                    >Cancsel</b-button
+                    >Cancel</b-button
                   >
                 </b-row>
               </b-container>
@@ -515,6 +515,7 @@
 
 <script>
 // import Navbar from '../components/_base/Navbar'
+import JsPDF from 'jspdf'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import axios from 'axios'
 
@@ -694,19 +695,6 @@ export default {
       if (this.search.length < 1) {
         this.isSearch = true
       }
-      // axios
-      //   .get(
-      //     `http://127.0.0.1:3001/product/search/name?name=${this.search}&limit=${this.limit}`
-      //   )
-      //   .then(response => {
-      //     this.products = response.data.data
-      //     if (this.search.length < 1) {
-      //       this.isSearch = true
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error)
-      //   })
     },
 
     handleFile(event) {
@@ -736,18 +724,21 @@ export default {
         })
     },
     checkOut() {
+      console.log(this.url_API)
       // this.$router.push('?checkout')
       const setCart = {
         history: [...this.cart]
       }
       // this.checkOutStore()
       axios
-        .post(`${process.env.VUE_APP_URL}history/CheckOut`, setCart)
+        .post(`${this.url_API}history/CheckOut`, setCart)
         .then((response) => {
           this.modalCekot = response.data.data.orders
           this.invoice = response.data.data.invoice
           this.subTotal = response.data.data.subtotal
+          console.log(this.modalCekot)
           console.log(this.invoice)
+          console.log(this.subTotal)
         })
         .catch((error) => {
           console.log(error)
@@ -792,19 +783,6 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      //  this.addProducts(data)
-      // .then(response => {
-      //   this.alert = true
-      //   this.isMsg = response.msg
-      //   setTimeout(() => {
-      //     this.alert = false
-      //   }, 2000)
-      //   this.getProducts()
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      //   this.alert = true
-      //   this.isMsg = error.response.msg
     },
     deleteProduct(data) {
       // console.log(data)
@@ -820,6 +798,30 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    downloadPDF() {
+      const doc = new JsPDF()
+      doc.setFontSize(14)
+      doc.text(
+        `   Check Out Print
+      Date : ${new Date()}
+      ---------------------------------------------------
+      Cashier : Rp. ${this.user.user_name}
+      Invoice no. #${this.invoice}
+
+      ${this.modalCekot.product_name} ${this.modalCekot.order_qty}x
+      Total Price : Rp. ${
+        this.modalCekot.order_qty * this.modalCekot.product_price
+      }
+      Total + ppn 10% : Rp. ${this.subtotal}
+      Payment : Cash
+      ---------------------------------------------------
+      Thank you ! `,
+        15,
+        15
+      )
+
+      doc.save('pdf.pdf')
     }
   }
 }
