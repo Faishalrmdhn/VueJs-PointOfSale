@@ -6,6 +6,7 @@
     ·
     <a href="https://github.com/Faishalrmdhn/VueJs-PointOfSale/issues">Request Feature</a>
   </p>
+  
 ![Image Banner](https://raw.githubusercontent.com/Faishalrmdhn/VueJs-PointOfSale/master/mockup.jpg)
 
 ## About The Project
