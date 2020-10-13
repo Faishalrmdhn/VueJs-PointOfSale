@@ -10,159 +10,8 @@
 
       <b-row>
         <b-col sm="8">
-          <!-----wrap icon navbar-->
-          <b-row class="text-center container-nav">
-            <div class="nav1" v-b-toggle.sidebar-variant>
-              <img src="../assets/hamburger.png" alt />
-              <b-sidebar
-                id="sidebar-variant"
-                title
-                bg-variant="light"
-                text-variant="dark"
-                shadow
-              >
-                <div class="px-3 py-2">
-                  <img
-                    src="../assets/account.png"
-                    style="max-width: 50px"
-                    alt
-                  />
-                  <h5>{{ user.user_name }}</h5>
-                  <hr />
-                  <div class="side mt-2">
-                    <router-link to="/">
-                      <img
-                        src="../assets/fork32.png"
-                        style="max-width: 50px"
-                        alt
-                      /> </router-link
-                    >Food Items
-                  </div>
-                  <div class="side mt-2">
-                    <router-link to="/History">
-                      <img
-                        src="../assets/clipboard32.png"
-                        style="max-width: 50px"
-                        alt
-                      /> </router-link
-                    >History
-                  </div>
-                  <div
-                    class="side mt-2"
-                    @click="$bvModal.show('bv-modal-examples')"
-                  >
-                    <img
-                      src="../assets/add32.png"
-                      style="max-width: 50px"
-                      alt
-                    />
-                    Add Item
-                    <b-modal id="bv-modal-examples" hide-footer style>
-                      <template v-slot:modal-title>Add Item</template>
-                      <b-form v-on:submit.prevent>
-                        <b-input
-                          type="text"
-                          v-model="form.product_name"
-                          placeholder="Product Name"
-                        />
-                        <br />
-                        <b-input
-                          type="number"
-                          v-model="form.product_price"
-                          placeholder="Product Price"
-                        />
-                        <br />
-                        <b-input
-                          type="number"
-                          v-model="form.product_status"
-                          placeholder="Product status"
-                        />
-                        <br />
-                        <b-input
-                          type="number"
-                          v-model="form.category_id"
-                          placeholder="Product category id"
-                        />
-                        <br />
+          <NavTop />
 
-                        <input type="file" @change="handleFile" />
-                        <br />
-
-                        <div @click="$bvModal.hide('bv-modal-examples')">
-                          <b-button
-                            type="submit"
-                            class="mt-3"
-                            variant="info"
-                            block
-                            @click="addProduct()"
-                            >Add</b-button
-                          >
-                        </div>
-
-                        <div>
-                          <b-button
-                            class="mt-3"
-                            variant="secondary"
-                            block
-                            @click="$bvModal.hide('bv-modal-examples')"
-                            >Cancel</b-button
-                          >
-                        </div>
-                      </b-form>
-                    </b-modal>
-                  </div>
-                  <div
-                    v-if="user.user_role === 1"
-                    class="side"
-                    @click="userPage()"
-                  >
-                    <img
-                      src="../assets/control32.png"
-                      style="max-width: 50px"
-                      alt
-                    />
-                    User Control
-                  </div>
-                  <div class="side" @click="$bvModal.show('modalLogout')">
-                    <img
-                      src="../assets/logout32.png"
-                      style="max-width: 50px"
-                      alt
-                    />
-                    Logout
-                  </div>
-                </div>
-                <b-modal hide-footer hide-header id="modalLogout">
-                  <template>Are you sure want to logout?</template>
-                  <b-row class="text-center mt-5"
-                    ><b-col cols="12" md="6"
-                      ><b-button @click="logout" block variant="danger"
-                        >Yes</b-button
-                      ></b-col
-                    ><b-col cols="12" md="6"
-                      ><b-button
-                        @click="$bvModal.hide('modalLogout')"
-                        block
-                        variant="info"
-                        >No</b-button
-                      ></b-col
-                    ></b-row
-                  ></b-modal
-                >
-              </b-sidebar>
-            </div>
-            <div class="nav2">Food Items</div>
-            <!-- ===============================SEARCH STARTS======================================= -->
-            <div
-              v-show="isSearch"
-              class="nav3 searchIcon"
-              @click="searchProduct()"
-            >
-              <img src="../assets/search.png" alt />
-            </div>
-
-            <!-- ===============================SEARCH ENDS======================================= -->
-          </b-row>
           <b-container fluid class="px-0">
             <!-- wrap baris ke-2 -->
             <b-row
@@ -515,6 +364,7 @@
 
 <script>
 // import Navbar from '../components/_base/Navbar'
+import NavTop from '../components/_base/navTop'
 import JsPDF from 'jspdf'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import axios from 'axios'
@@ -522,7 +372,8 @@ import axios from 'axios'
 export default {
   name: 'Home',
   components: {
-    // Navbar
+    // Navbar,
+    NavTop
   },
   data() {
     return {
@@ -580,8 +431,7 @@ export default {
       'updateProducts',
       'deleteProducts',
       'getProducts',
-      'searchProductStore',
-      'logout'
+      'searchProductStore'
       // 'checkOutStore'
     ]),
     ...mapMutations([
@@ -594,9 +444,7 @@ export default {
       'ascdscProduct',
       'resetCount'
     ]),
-    userPage() {
-      this.$router.push('/user')
-    },
+
     sortByNameAsc() {
       // this.$router.push(
       //   `?sort=product_name&page=${this.page}&limit=${this.limit}&ascdsc=asc`
@@ -837,18 +685,6 @@ export default {
   text-align: center;
 }
 
-.container-nav {
-  width: auto;
-  height: 100px;
-  display: flex;
-  flex-flow: row wrap;
-  font-size: 30px;
-  font-family: 'Montaga', serif, sans-serif;
-  text-align: center;
-  background: #ffffff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-}
-
 .container-sort {
   margin-top: 8px;
   color: black;
@@ -856,34 +692,6 @@ export default {
   height: 50px;
   /* background: rgb(35, 162, 77); */
   font-size: 18px;
-}
-
-.nav1 {
-  padding: 5px;
-  margin: auto;
-  flex: 1;
-}
-
-.nav2 {
-  margin: auto;
-  flex: 10;
-}
-
-.nav2 a {
-  color: black;
-  text-decoration: none;
-}
-
-.nav2 a:hover {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.nav3 {
-  padding: 5px;
-  margin: auto;
-  flex: 1;
 }
 
 .modals {
@@ -917,19 +725,6 @@ export default {
   background: #ffffff;
   box-shadow: 0px 4px -5px rgba(0, 0, 0, 0.25);
   align-content: flex-start;
-}
-
-.side {
-  text-align: left;
-  font-family: 'Montaga', serif, sans-serif;
-  font-size: 15px;
-  margin: auto;
-  padding: 15px 0px;
-  flex: 1;
-}
-
-.side:hover {
-  cursor: pointer;
 }
 
 .container-item {
