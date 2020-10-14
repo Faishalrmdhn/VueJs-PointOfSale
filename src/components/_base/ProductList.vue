@@ -111,18 +111,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import formMixins from '../mixins/formMixins'
 export default {
+  mixins: [formMixins],
   name: 'ProductList',
   data() {
     return {
       url_API: process.env.VUE_APP_URL,
-      form: {
-        product_name: '',
-        product_price: '',
-        product_status: '',
-        category_id: '',
-        product_image: {}
-      },
       isUpdate: false
     }
   },

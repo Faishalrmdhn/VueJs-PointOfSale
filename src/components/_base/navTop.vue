@@ -13,7 +13,7 @@
           <img src="../../assets/account.png" style="max-width: 50px" alt />
           <h5>{{ user.user_name }}</h5>
           <hr />
-          <div v-size class="side mt-2">
+          <div  class="side mt-2">
             <router-link to="/">
               <img
                 src="../../assets/fork32.png"
@@ -126,21 +126,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import formMixins from '../mixins/formMixins'
 export default {
+  mixins: [formMixins],
   name: 'NavTop',
   data() {
     return {
-      form: {
-        product_name: '',
-        product_price: '',
-        product_status: '',
-        category_id: '',
-        product_image: {}
-      },
-      isSearch: true,
-      counter: 0,
-      alert: false,
-      isMsg: false
+      counter: 0
     }
   },
   methods: {
@@ -178,6 +170,11 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+          this.$bvToast.toast(`${error.data.msg}`, {
+            title: 'Info ',
+            variant: 'danger',
+            solid: true
+          })
         })
     }
   },
