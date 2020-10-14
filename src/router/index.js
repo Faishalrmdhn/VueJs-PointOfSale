@@ -31,11 +31,6 @@ const routes = [
     component: Product,
     meta: { requiresAuth: true }
   },
-  // {
-  //   path: '/Axios',
-  //   name: 'Axios',
-  //   component: Axios
-  // },
   {
     path: '/lifecycle',
     name: 'Lifecycle',

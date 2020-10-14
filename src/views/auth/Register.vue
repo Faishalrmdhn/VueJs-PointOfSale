@@ -23,6 +23,7 @@
             >
               <b-form-group label="Email">
                 <input
+                  v-focus
                   v-model="form.user_email"
                   type="email"
                   required
@@ -65,6 +66,14 @@
 import { mapActions } from 'vuex'
 export default {
   name: 'Register',
+  directives: {
+    focus: {
+      // directive definition
+      inserted: function (el) {
+        el.focus()
+      }
+    }
+  },
   data() {
     return {
       form: {
@@ -82,12 +91,12 @@ export default {
         alert('Password length must be at least 8 Character')
       } else {
         this.register(this.form)
-          .then(result => {
+          .then((result) => {
             console.log(result)
             this.$router.push('/login')
             alert('Signup Successfull!')
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error)
           })
       }

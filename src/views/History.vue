@@ -220,6 +220,7 @@ import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'history',
+
   data() {
     return {
       name: 'isal',
@@ -230,7 +231,8 @@ export default {
       popY: false,
       yearIncome: null,
       todayIncome: 0,
-      orders: 0
+      orders: 0,
+      test: []
     }
   },
   computed: { ...mapGetters({ user: 'getUser' }) },
@@ -249,7 +251,7 @@ export default {
       this.popY = false
       axios
         .get(
-          'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=DESC'
+          'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=desc'
         )
         .then((response) => {
           const month = response.data.pagination.getMonth
@@ -258,6 +260,7 @@ export default {
           this.yearIncome = response.data.pagination.getYear[0].subtotal
           this.recent = response.data.data
           this.todayIncome = response.data.pagination.getToday[0].subtotal
+          this.test = response.data
         })
         .catch((error) => {
           console.log(error)

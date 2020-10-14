@@ -43,45 +43,6 @@
       </div></b-col
     >
   </b-row>
-
-  <!-- <b-row align-v="center" align-h="center" class="container mx-0">
-    <b-col sm="6" class="card">
-      <b-row align-v="center" class="content-left"></b-row>
-      <b-col>
-        <h3>ELCAPP</h3>
-        <p>Online Food Cashier Application</p></b-col
-      >
-      <b-form>
-        Email
-        <b-input
-          type="email"
-          v-model="form.user_email"
-          placeholder="Input email"
-        />User Name
-        <b-input
-          type="text"
-          v-model="form.user_name"
-          placeholder="Input name"
-        />User Status
-        <b-input
-          type="number"
-          v-model="form.user_status"
-          placeholder="Input user status"
-        />User Password
-        <b-input
-          type="password"
-          v-model="form.user_password"
-          placeholder="Input user password"
-        />User Role
-        <b-input
-          type="number"
-          v-model="form.user_role"
-          placeholder="Input user role"
-        />
-        <b-button pill variant="outline-info" type="submit">Submit</b-button>
-      </b-form>
-    </b-col>
-  </b-row> -->
 </template>
 
 <script>
@@ -104,10 +65,10 @@ export default {
     getAllUser() {
       axios
         .get('http://127.0.0.1:3001/users')
-        .then(response => {
+        .then((response) => {
           this.userTable = response.data.data
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     }
@@ -126,42 +87,5 @@ export default {
   height: 100vh;
   width: 100%;
   text-align: center;
-}
-
-.card {
-  /* height: 370px; */
-  background-color: transparent;
-  /* color: teal; */
-  /* width: 400px; */
-}
-
-.regist:hover {
-  cursor: pointer;
-  color: rgb(87, 199, 187);
-}
-
-.regist {
-  color: rgb(117, 115, 115);
-}
-
-.left {
-  height: 100%;
-  width: 100%;
-  background-color: rgb(87, 199, 187);
-}
-
-.right {
-  /* color: aqua; */
-  height: 100%;
-  width: 100%;
-  background-color: rgb(47, 64, 84);
-}
-
-.content-left {
-  height: 100%;
-}
-
-.content-right {
-  height: 100%;
 }
 </style>

@@ -12,6 +12,8 @@ import store from './store'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
 
+// vue.directive("size")
+
 Vue.use(Chartkick.use(Chart))
 Vue.use(VueAxios, axios)
 

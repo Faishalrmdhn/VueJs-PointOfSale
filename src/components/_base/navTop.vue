@@ -13,7 +13,7 @@
           <img src="../../assets/account.png" style="max-width: 50px" alt />
           <h5>{{ user.user_name }}</h5>
           <hr />
-          <div class="side mt-2">
+          <div v-size class="side mt-2">
             <router-link to="/">
               <img
                 src="../../assets/fork32.png"
@@ -118,9 +118,9 @@
     </div>
     <div class="nav2">Food Items</div>
 
-    <div v-show="isSearch" class="nav3 searchIcon" @click="searchProduct()">
+    <!-- <div v-show="isSearch" class="nav3 searchIcon" @click="searchProduct()">
       <img src="../../assets/search.png" alt />
-    </div>
+    </div> -->
   </b-row>
 </template>
 
@@ -137,11 +137,19 @@ export default {
         category_id: '',
         product_image: {}
       },
-      isSearch: true
+      isSearch: true,
+      counter: 0,
+      alert: false,
+      isMsg: false
     }
   },
   methods: {
-    ...mapActions(['logout', 'searchProductStore']),
+    ...mapActions([
+      'logout',
+      'searchProductStore',
+      'addProducts',
+      'getProducts'
+    ]),
     ...mapMutations(['searchMutation']),
     handleFile() {
       this.form.product_image = event.target.files[0]
@@ -149,23 +157,32 @@ export default {
     },
     userPage() {
       this.$router.push('/user')
+    },
+    addProduct() {
+      const data = new FormData()
+      data.append('product_name', this.form.product_name)
+      data.append('category_id', this.form.category_id)
+      data.append('product_price', this.form.product_price)
+      data.append('product_status', this.form.product_status)
+      data.append('product_image', this.form.product_image)
+
+      this.addProducts(data)
+        .then((response) => {
+          console.log(response)
+          this.$bvToast.toast(`${response.msg}`, {
+            title: 'Info ',
+            variant: 'info',
+            solid: true
+          })
+          this.getProducts()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   computed: {
     ...mapGetters({ user: 'getUser' })
-  },
-
-  searchProduct() {
-    this.isSearch = false
-  },
-  searchProducts() {
-    // this.$router.push(`?name=${this.search}&limit=${this.limit}`)
-    console.log(this.search)
-    this.searchMutation(this.search)
-    this.searchProductStore()
-    if (this.search.length < 1) {
-      this.isSearch = true
-    }
   }
 }
 </script>
@@ -221,6 +238,10 @@ export default {
 }
 
 .side:hover {
+  cursor: pointer;
+}
+
+.searchIcon:hover {
   cursor: pointer;
 }
 </style>

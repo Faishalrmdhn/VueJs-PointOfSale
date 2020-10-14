@@ -24,6 +24,7 @@
             >
               <b-form-group label="Email">
                 <input
+                  v-focus
                   v-model="form.user_email"
                   type="email"
                   required
@@ -58,6 +59,14 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Login',
+  directives: {
+    focus: {
+      // directive definition
+      inserted: function (el) {
+        el.focus()
+      }
+    }
+  },
   data() {
     return {
       form: {
@@ -78,6 +87,7 @@ export default {
           console.log(result)
           this.$bvToast.toast(result.data.msg, {
             title: 'Status :',
+            variant: 'success',
             autoHideDelay: 2500,
             appendToast: true
           })
@@ -87,6 +97,7 @@ export default {
           console.log(error.data.msg)
           this.$bvToast.toast(error.data.msg, {
             title: 'Status :',
+            variant: 'danger',
             autoHideDelay: 2500,
             appendToast: true
           })

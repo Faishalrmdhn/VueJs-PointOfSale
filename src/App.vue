@@ -1,13 +1,19 @@
 <template>
   <div id="app">
+    <!-- <MessageList :messages="messages" /> -->
     <router-view />
   </div>
 </template>
 
 <script>
+// import MessageList from './components/MessageList'
 import { mapActions } from 'vuex'
 export default {
   name: 'App',
+  // data: () => ({ messages: ['Hey John', 'Howdy Paco'] }),
+  // components: {
+  //   MessageList
+  // },
   methods: {
     ...mapActions(['interceptorRequest', 'interceptorResponse'])
   },
