@@ -58,7 +58,118 @@
                 <!-- <b-container class="mt-2"> -->
                 <!-- ======================================================================================================= -->
                 <b-container fluid>
-                  <ProductList />
+                  <b-row>
+                    <b-col
+                      sm="4"
+                      v-for="(item, index) in products"
+                      :key="index"
+                    >
+                      <b-card
+                        style="font-family: 'Montaga', serif, sans-serif"
+                        v-bind:title="item.product_name"
+                        :img-src="url_API + item.product_image"
+                        img-alt="Image"
+                        title-tag="h5"
+                        img-top
+                        img-height="185"
+                        tag="article"
+                        class="mb-2"
+                      >
+                        <!-- pakai div dan style utk selected -->
+                        <!-- <p v-if="checkCart(item)">
+                        <img src="../assets/tick.png" alt />
+                        </p>-->
+                        <!-- pakai div dan style utk selected -->
+                        <b-card-text>Rp.{{ item.product_price }}</b-card-text>
+
+                        <b-button
+                          size="sm"
+                          variant="outline-info"
+                          @click="addToCart(item)"
+                          class="mr-3"
+                        >
+                          <img src="../assets/cart.png" alt />
+                        </b-button>
+
+                        <!-- ================================UPDATE============================================ -->
+                        <span @click="$bvModal.show('bv-modal-update')">
+                          <b-button
+                            class="mr-3"
+                            v-if="user.user_role === 1"
+                            size="sm"
+                            variant="outline-warning"
+                            id="show-btn"
+                            @click="setProduct(item)"
+                          >
+                            <img src="../assets/update.png" alt />
+                          </b-button>
+                        </span>
+
+                        <!-- ================================UPDATE============================================ -->
+                        <b-button
+                          v-if="user.user_role === 1"
+                          size="sm"
+                          variant="outline-danger"
+                          @click="deleteProduct(item)"
+                        >
+                          <img src="../assets/delete.png" alt />
+                        </b-button>
+                      </b-card>
+                    </b-col>
+                    <b-modal id="bv-modal-update" hide-footer style>
+                      <template v-slot:modal-title>Update Item</template>
+                      <b-form v-on:submit.prevent>
+                        <b-input
+                          type="text"
+                          v-model="form.product_name"
+                          placeholder="Product Name"
+                        />
+                        <br />
+                        <b-input
+                          type="number"
+                          v-model="form.product_price"
+                          placeholder="Product Price"
+                        />
+                        <br />
+                        <b-input
+                          type="number"
+                          v-model="form.product_status"
+                          placeholder="Product status"
+                        />
+                        <br />
+                        <b-input
+                          type="number"
+                          v-model="form.category_id"
+                          placeholder="Product category id"
+                        />
+                        <br />
+
+                        <input type="file" @change="handleFile" />
+                        <br />
+
+                        <div @click="$bvModal.hide('bv-modal-update')">
+                          <b-button
+                            type="button"
+                            class="mt-3"
+                            variant="info"
+                            block
+                            @click="patchProduct()"
+                            v-show="isUpdate"
+                            >Update</b-button
+                          >
+                        </div>
+                        <div>
+                          <b-button
+                            class="mt-3"
+                            variant="secondary"
+                            block
+                            @click="$bvModal.hide('bv-modal-update')"
+                            >Cancel</b-button
+                          >
+                        </div>
+                      </b-form>
+                    </b-modal>
+                  </b-row>
                 </b-container>
                 <!-- ======================================================================================================= -->
                 <!-- ==============================PAGINATION STARTS================================== -->
@@ -104,9 +215,11 @@
                 <div v-for="(value, index) in cart" :key="index">
                   <b-row class="m-2 modals">
                     <b-col sm="4">
-                      <!-- {{ value.product_image }} -->
-
-                      <img src="../assets/item1.png" alt style="width: 100%" />
+                      <img
+                        :src="url_API + value.product_image"
+                        alt
+                        style="width: 100%"
+                      />
                     </b-col>
                     <b-col sm="4">
                       <b-row>{{ value.product_name }}</b-row>
@@ -244,7 +357,7 @@
 
 <script>
 // import Navbar from '../components/_base/Navbar'
-import ProductList from '../components/_base/ProductList'
+// import ProductList from '../components/_base/ProductList'
 import NavTop from '../components/_base/navTop'
 import JsPDF from 'jspdf'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
@@ -254,8 +367,8 @@ export default {
   name: 'Home',
   components: {
     // Navbar,
-    NavTop,
-    ProductList
+    NavTop
+    // ProductList
   },
   data() {
     return {
@@ -319,7 +432,7 @@ export default {
       'changePage',
       'searchMutation',
       'sortProduct',
-      // 'addToCartStore',
+      'addToCartStore',
       'incrementCart',
       'decrementCountStore',
       'ascdscProduct',

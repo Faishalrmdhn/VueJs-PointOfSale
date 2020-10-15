@@ -224,6 +224,21 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    addToCart(data) {
+      this.isAdded = false
+      this.addToCartStore(data)
+      //  // console.log(data)
+      // this.isAdded = false
+      // const setCart = {
+      //   product_id: data.product_id,
+      //   product_name: data.product_name,
+      //   order_qty: 1,
+      //   product_price: data.product_price,
+      //   totalPrice: data.product_price
+      // }
+      // this.count += 1
+      // this.cart = [...this.cart, setCart]
     }
   }
 }
