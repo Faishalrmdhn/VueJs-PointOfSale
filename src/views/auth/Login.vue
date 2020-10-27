@@ -3,7 +3,7 @@
     <b-col md="6" class="left">
       <b-row align-v="center" class="content-left">
         <b-col>
-          <img src="../../assets/burger.png" alt />
+          <img src="../../assets/icon.png" alt />
           <h3>ELCAPP</h3>
           <p>Online Food Cashier Application</p>
         </b-col>
@@ -61,7 +61,6 @@ export default {
   name: 'Login',
   directives: {
     focus: {
-      // directive definition
       inserted: function (el) {
         el.focus()
       }
@@ -101,11 +100,6 @@ export default {
             autoHideDelay: 2500,
             appendToast: true
           })
-          // if (error.data.msg === 'Wrong Pasword') {
-          //   alert('Wrong Password!')
-          // } else if (error.data.msg === 'Email Not Registered') {
-          //   alert('Your email is not registered')
-          // }
         })
     },
     onReset() {
@@ -122,11 +116,9 @@ export default {
 </script>
 
 <style scoped>
-/* @import url('https://fonts.googleapis.com/css?family=Numans'); */
 @import url('https://fonts.googleapis.com/css2?family=Montaga&display=swap');
 
 .login {
-  /* font-family: Helvetica, 'Numans', sans-serif; */
   color: white;
   font-family: 'Montaga', 'Numans', sans-serif;
 
@@ -142,10 +134,8 @@ h3 {
 }
 
 .card {
-  /* height: 370px; */
   background-color: transparent;
   border: transparent;
-  /* width: 400px; */
 }
 
 .regist:hover {
@@ -164,7 +154,6 @@ h3 {
 }
 
 .right {
-  /* color: aqua; */
   height: 100%;
   width: 100%;
   background-color: rgb(47, 64, 84);

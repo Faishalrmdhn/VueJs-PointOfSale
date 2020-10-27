@@ -3,7 +3,7 @@
     <b-col md="6" class="left">
       <b-row align-v="center" class="content-left">
         <b-col>
-          <img src="../../assets/burger.png" alt />
+          <img src="../../assets/icon.png" alt />
           <h3>ELCAPP</h3>
           <p>Online Food Cashier Application</p>
         </b-col>
@@ -68,7 +68,6 @@ export default {
   name: 'Register',
   directives: {
     focus: {
-      // directive definition
       inserted: function (el) {
         el.focus()
       }
@@ -116,26 +115,18 @@ export default {
 </script>
 
 <style scoped>
-/* @import url('https://fonts.googleapis.com/css?family=Numans'); */
 @import url('https://fonts.googleapis.com/css2?family=Montaga&display=swap');
 .register {
   font-family: 'Montaga', 'Numans', sans-serif;
   color: white;
-  /* font-family: 'Numans', sans-serif; */
-  /* background-image: url('../../assets') */
-  /* background-image: url('http://getwallpapers.com/wallpaper/full/2/9/7/494243.jpg'); */
-  /* background-size: cover;
-  background-repeat: no-repeat; */
   height: 100vh;
   width: 100%;
   text-align: center;
 }
 
 .card {
-  /* height: 370px; */
   background-color: transparent;
-  /* color: teal; */
-  /* width: 400px; */
+  border: transparent;
 }
 .login {
   color: rgb(117, 115, 115);
@@ -153,7 +144,6 @@ export default {
 }
 
 .right {
-  /* color: aqua; */
   height: 100%;
   width: 100%;
   background-color: rgb(47, 64, 84);

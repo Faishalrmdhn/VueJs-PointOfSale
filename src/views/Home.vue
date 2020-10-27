@@ -1,7 +1,5 @@
 <template>
   <div class="home">
-    <!-- <Navbar /> -->
-    <!-- <navTop /> -->
     <b-container fluid>
       <b-alert :show="alert" class="m-3" variant="success">{{ isMsg }}</b-alert>
       <b-alert :show="delAlert" class="m-3" variant="danger">
@@ -13,7 +11,6 @@
           <NavTop />
 
           <b-container fluid class="px-0">
-            <!-- wrap baris ke-2 -->
             <b-row
               class="text-center"
               style="background: rgba(190, 195, 202, 0.3)"
@@ -55,8 +52,7 @@
                     </b-dropdown>
                   </b-col>
                 </b-row>
-                <!-- <b-container class="mt-2"> -->
-                <!-- ======================================================================================================= -->
+
                 <b-container fluid>
                   <b-row>
                     <b-col
@@ -91,7 +87,6 @@
                           <img src="../assets/cart.png" alt />
                         </b-button>
 
-                        <!-- ================================UPDATE============================================ -->
                         <span @click="$bvModal.show('bv-modal-update')">
                           <b-button
                             class="mr-3"
@@ -105,7 +100,6 @@
                           </b-button>
                         </span>
 
-                        <!-- ================================UPDATE============================================ -->
                         <b-button
                           v-if="user.user_role === 1"
                           size="sm"
@@ -171,8 +165,7 @@
                     </b-modal>
                   </b-row>
                 </b-container>
-                <!-- ======================================================================================================= -->
-                <!-- ==============================PAGINATION STARTS================================== -->
+
                 <b-row align-h="center">
                   <b-col sm="6">
                     <b-pagination
@@ -184,14 +177,11 @@
                     ></b-pagination>
                   </b-col>
                 </b-row>
-                <!-- ==============================PAGINATION ENDS================================== -->
-                <!-- </b-container> -->
               </b-col>
-              <!-- wrap item ends-->
             </b-row>
           </b-container>
         </b-col>
-        <!-- ====================================CART STARTS================================================= -->
+
         <b-col sm="4">
           <b-row class="text-center container-cart">
             <b-col sm class="m-auto">
@@ -210,7 +200,7 @@
                   <p>Please add some item from the menu</p>
                 </div>
               </div>
-              <!-- =========================COLUMN ADDTOCART START============================ -->
+
               <b-container v-show="!isAdded" class="mt-2">
                 <div v-for="(value, index) in cart" :key="index">
                   <b-row class="m-2 modals">
@@ -255,10 +245,8 @@
                       >Rp.{{ value.product_price * value.order_qty }}</b-col
                     >
                   </b-row>
-                  <!-- <b-row class="m-5">
-                  <h3>total :{{value.totalPrice}}</h3>
-                  </b-row>-->
                 </div>
+
                 <b-row class="modals">
                   <b-col class="text-left">Total:</b-col>
                   <b-col>Rp.{{ totals }}</b-col>
