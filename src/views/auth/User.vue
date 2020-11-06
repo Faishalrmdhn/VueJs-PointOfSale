@@ -8,19 +8,21 @@
               <th scope="col">User Id</th>
               <th scope="col">User Email</th>
               <th scope="col">User Name</th>
-              <th scope="col">user Role</th>
+              <th scope="col">User Role</th>
               <th scope="col">User Status</th>
               <th scope="col">Activation</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(value, index) in userTable" :key="index">
+            <tr v-for="(value, index) in allUser" :key="index">
               <!-- <th scope="row">1</th> -->
               <td>{{ value.user_id }}</td>
               <td>{{ value.user_email }}</td>
               <td>{{ value.user_name }}</td>
-              <td>{{ value.user_role }}</td>
-              <td>{{ value.user_status }}</td>
+              <td v-if="value.user_role === 1">Admin</td>
+              <td v-if="value.user_role !== 1">Cashier</td>
+              <td v-if="value.user_status === 1">Active</td>
+              <td v-if="value.user_status !== 1">Non Active</td>
               <td>
                 <b-dropdown
                   variant="info"
@@ -29,10 +31,10 @@
                   text="Option"
                   class="m-md-3"
                 >
-                  <b-dropdown-item @click="activate()"
+                  <b-dropdown-item @click="activate(value)"
                     >Activate</b-dropdown-item
                   >
-                  <b-dropdown-item @click="disabled()"
+                  <b-dropdown-item @click="disabled(value)"
                     >Disable</b-dropdown-item
                   ></b-dropdown
                 >
@@ -46,31 +48,54 @@
 </template>
 
 <script>
-import axios from 'axios'
-// import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'User',
   data() {
     return {
-      userTable: []
+      // userTable: []
     }
   },
   created() {
     this.getAllUser()
+    this.getAllUser()
+  },
+  computed: {
+    ...mapGetters({ allUser: 'getAllUser' })
   },
   methods: {
-    activate() {},
-    disabled() {},
-    // ...mapActions([''])
-    getAllUser() {
-      axios
-        .get('http://127.0.0.1:3001/users')
+    ...mapActions(['getAllUser', 'activateAccount']),
+    activate(data) {
+      const setData = {
+        user_email: data.user_email,
+        user_name: data.user_name,
+        user_role: data.user_role,
+        user_status: 1
+      }
+      this.activateAccount(setData)
         .then((response) => {
-          this.userTable = response.data.data
+          console.log(response)
         })
         .catch((error) => {
           console.log(error)
         })
+      this.getAllUser()
+    },
+    disabled(data) {
+      const setData = {
+        user_email: data.user_email,
+        user_name: data.user_name,
+        user_role: data.user_role,
+        user_status: 0
+      }
+      this.activateAccount(setData)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      this.getAllUser()
     }
   }
 }
@@ -81,9 +106,8 @@ export default {
 
 .control {
   /* font-family: Helvetica, 'Numans', sans-serif; */
-  color: white;
+  color: black;
   font-family: 'Montaga', 'Numans', sans-serif;
-
   height: 100vh;
   width: 100%;
   text-align: center;
