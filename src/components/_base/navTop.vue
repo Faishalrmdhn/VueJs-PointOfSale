@@ -1,5 +1,6 @@
 <template>
   <b-row class="text-center container-nav">
+    <!-- <div>== {{ todayIncome }} ==</div> -->
     <div class="nav1" v-b-toggle.sidebar-variant>
       <img src="../../assets/hamburger.png" alt />
       <b-sidebar
@@ -13,24 +14,25 @@
           <img src="../../assets/account.png" style="max-width: 50px" alt />
           <h5>{{ user.user_name }}</h5>
           <hr />
-          <div  class="side mt-2">
-            <router-link to="/">
-              <img
-                src="../../assets/fork32.png"
-                style="max-width: 50px"
-                alt
-              /> </router-link
-            >Food Items
-          </div>
-          <div class="side mt-2">
-            <router-link to="/History">
+          <router-link style="color: black; text-decoration: none" to="/">
+            <div class="side mt-2">
+              <img src="../../assets/fork32.png" style="max-width: 50px" alt />
+              Food Items
+            </div></router-link
+          >
+          <router-link
+            style="color: black; text-decoration: none"
+            to="/History"
+          >
+            <div class="side mt-2">
               <img
                 src="../../assets/clipboard32.png"
                 style="max-width: 50px"
                 alt
-              /> </router-link
-            >History
-          </div>
+              />
+              History
+            </div></router-link
+          >
           <div class="side mt-2" @click="$bvModal.show('bv-modal-examples')">
             <img src="../../assets/add32.png" style="max-width: 50px" alt />
             Add Item
@@ -129,10 +131,11 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 import formMixins from '../mixins/formMixins'
 export default {
   mixins: [formMixins],
-  name: 'NavTop',
+  // name: 'NavTop',
   data() {
     return {
       counter: 0
+      // todayIncome: 0
     }
   },
   methods: {

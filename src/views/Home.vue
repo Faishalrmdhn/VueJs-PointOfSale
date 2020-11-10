@@ -5,11 +5,9 @@
       <b-alert :show="delAlert" class="m-3" variant="danger">
         {{ delMsg }}
       </b-alert>
-
       <b-row>
         <b-col sm="8">
           <NavTop />
-
           <b-container fluid class="px-0">
             <b-row
               class="text-center"
@@ -349,7 +347,7 @@
 import NavTop from '../components/_base/navTop'
 import JsPDF from 'jspdf'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -360,10 +358,9 @@ export default {
   },
   data() {
     return {
+      name: 'Home',
       url_API: process.env.VUE_APP_URL,
-      // count: 0,
-      invoice: 0,
-      // cart: [],
+      // invoice: 0,
       form: {
         product_name: '',
         product_price: '',
@@ -380,9 +377,9 @@ export default {
       delMsg: '',
       isAdded: true,
       isSearch: true,
-      currentPage: 1,
-      subTotal: 0,
-      modalCekot: {}
+      currentPage: 1
+      // subTotal: 0,
+      // modalCekot: {}
     }
   },
   computed: {
@@ -394,7 +391,10 @@ export default {
       cart: 'getCart',
       totals: 'getTotalsCart',
       count: 'getCount',
-      user: 'getUser'
+      user: 'getUser',
+      modalCekot: 'getModalCekot',
+      invoice: 'getInvoice',
+      subTotal: 'getSubtotal'
     })
   },
   created() {
@@ -413,8 +413,8 @@ export default {
       'updateProducts',
       'deleteProducts',
       'getProducts',
-      'searchProductStore'
-      // 'checkOutStore'
+      'searchProductStore',
+      'checkOutStore'
     ]),
     ...mapMutations([
       'changePage',
@@ -498,17 +498,6 @@ export default {
     addToCart(data) {
       this.isAdded = false
       this.addToCartStore(data)
-      //  // console.log(data)
-      // this.isAdded = false
-      // const setCart = {
-      //   product_id: data.product_id,
-      //   product_name: data.product_name,
-      //   order_qty: 1,
-      //   product_price: data.product_price,
-      //   totalPrice: data.product_price
-      // }
-      // this.count += 1
-      // this.cart = [...this.cart, setCart]
     },
     checkCart(data) {
       return this.cart.some((item) => item.product_id === data.product_id)
@@ -526,109 +515,17 @@ export default {
         this.isSearch = true
       }
     },
-
     handleFile(event) {
       this.form.product_image = event.target.files[0]
       console.log(event.target.files)
     },
-    // addProduct() {
-    //   const data = new FormData()
-    //   data.append('product_name', this.form.product_name)
-    //   data.append('category_id', this.form.category_id)
-    //   data.append('product_price', this.form.product_price)
-    //   data.append('product_status', this.form.product_status)
-    //   data.append('product_image', this.form.product_image)
-
-    //   this.addProducts(data)
-    //     .then((response) => {
-    //       console.log(response)
-    //       this.alert = true
-    //       this.isMsg = response.msg
-    //       setTimeout(() => {
-    //         this.alert = false
-    //       }, 2000)
-    //       this.getProducts()
-    //     })
-    //     .catch((error) => {
-    //       console.log(error)
-    //     })
-    // },
     checkOut() {
-      console.log(this.url_API)
       // this.$router.push('?checkout')
       const setCart = {
         history: [...this.cart]
       }
-      // this.checkOutStore()
-      axios
-        .post(`${this.url_API}history/CheckOut`, setCart)
-        .then((response) => {
-          this.modalCekot = response.data.data.orders
-          this.invoice = response.data.data.invoice
-          this.subTotal = response.data.data.subtotal
-          console.log(this.modalCekot)
-          console.log(this.invoice)
-          console.log(this.subTotal)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      this.checkOutStore(setCart)
     },
-    // setProduct(data) {
-    //   console.log(data)
-    //   this.form = {
-    //     product_name: data.product_name,
-    //     product_price: data.product_price,
-    //     product_status: data.product_status,
-    //     category_id: data.category_id,
-    //     product_image: data.product_image
-    //   }
-    //   this.isUpdate = true
-    //   this.product_id = data.product_id
-    // },
-    // patchProduct() {
-    //   console.log(this.product_id)
-    //   console.log(this.form)
-    //   this.isUpdate = false
-    //   const data = new FormData()
-    //   data.append('product_name', this.form.product_name)
-    //   data.append('category_id', this.form.category_id)
-    //   data.append('product_price', this.form.product_price)
-    //   data.append('product_status', this.form.product_status)
-    //   data.append('product_image', this.form.product_image)
-    //   const setData = {
-    //     product_id: this.product_id,
-    //     form: data
-    //   }
-    //   this.updateProducts(setData)
-    //     .then((response) => {
-    //       console.log(response)
-    //       this.alert = true
-    //       this.isMsg = response.msg
-    //       setTimeout(() => {
-    //         this.alert = false
-    //       }, 2000)
-    //       this.getProducts()
-    //     })
-    //     .catch((error) => {
-    //       console.log(error)
-    //     })
-    // },
-    // deleteProduct(data) {
-    //   // console.log(data)
-    //   this.deleteProducts(data.product_id)
-    //     .then((response) => {
-    //       this.delAlert = true
-    //       this.delMsg = response.msg
-    //       setTimeout(() => {
-    //         this.delAlert = false
-    //       }, 2000)
-    //       this.getProducts()
-    //     })
-    //     .catch((error) => {
-    //       console.log(error)
-    //     })
-    // },
     downloadPDF() {
       const doc = new JsPDF()
       doc.setFontSize(14)

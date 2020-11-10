@@ -9,11 +9,10 @@ export default {
     search: '',
     cart: [],
     count: 0,
-    ascdsc: 'asc'
-
-    // modalCekot: {},
-    // invoice: 0,
-    // subTotal: 0
+    ascdsc: 'asc',
+    modalCekot: {},
+    invoice: 0,
+    subTotal: 0
   },
   mutations: {
     resetCount(state, payload) {
@@ -25,7 +24,6 @@ export default {
         state.totalData = payload.pagination.totalData
       }
     },
-    // setPage(state, payload) {
     changePage(state, payload) {
       state.page = payload
     },
@@ -49,7 +47,6 @@ export default {
         product_price: payload.product_price,
         totalPrice: payload.product_price
       }
-      // ======================================================================
       const fixedData = [...state.cart, setCart]
       const addedItem = fixedData.find(
         item => item.product_id === payload.product_id
@@ -64,7 +61,6 @@ export default {
         state.cart = [...state.cart, setCart]
       }
       state.count += 1
-      // ======================================================================
       // this.count += 1
       // this.cart = [...this.cart, setCart]
     },
@@ -78,13 +74,12 @@ export default {
     },
     decrementCountStore(state, payload) {
       state.count -= 1
+    },
+    checkOutMutation(state, payload) {
+      state.invoice = payload.invoice
+      state.modalCekot = payload.orders
+      state.subTotal = payload.subtotal
     }
-
-    // checkOutMutation(state, payload) {
-    //   state.invoice = payload.data.invoice
-    //   state.modalCekot = payload.data.orders
-    //   state.subTotal = payload.data.subtotal
-    // }
   },
   actions: {
     getProducts(context) {
@@ -104,7 +99,6 @@ export default {
         })
     },
     addProducts(context, payload) {
-      //   console.log(payload)
       return new Promise((resolve, reject) => {
         axios
           .post(`${process.env.VUE_APP_URL}product/`, payload)
@@ -169,21 +163,17 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    checkOutStore(context, payload) {
+      axios
+        .post(`${process.env.VUE_APP_URL}history/CheckOut`, payload)
+        .then(response => {
+          context.commit('checkOutMutation', response.data.data)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
-    // checkOutStore() {
-    //   axios
-    //     .post('http://127.0.0.1:3001/history/CheckOut', setCart)
-    //     .then(response => {
-    //       context.commit('checkOutMutation', response.data)
-    //       this.modalCekot = response.data.data.orders
-    //       this.invoice = response.data.data.invoice
-    //       this.subTotal = response.data.data.subtotal
-    //       console.log(this.invoice)
-    //     })
-    //     .catch(error => {
-    //       console.log(error)
-    //     })
-    // }
   },
   getters: {
     getLimit(state) {
@@ -208,6 +198,15 @@ export default {
     },
     getCount(state) {
       return state.count
+    },
+    getModalCekot(state) {
+      return state.modalCekot
+    },
+    getInvoice(state) {
+      return state.invoice
+    },
+    getSubtotal(state) {
+      return state.subTotal
     }
   }
 }

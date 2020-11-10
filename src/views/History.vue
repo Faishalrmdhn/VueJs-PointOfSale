@@ -2,7 +2,8 @@
   <b-container fluid>
     <b-row>
       <b-col sm="12">
-        <!-----wrap icon navbar-->
+        <!-- <NavTop /> -->
+        <!-- ---wrap icon navbar-->
         <b-row class="text-center container-nav">
           <div class="nav1" v-b-toggle.sidebar-variant>
             <img src="../assets/hamburger.png" alt />
@@ -17,24 +18,28 @@
                 <img src="../assets/account.png" style="max-width: 50px" alt />
                 <h5>{{ user.user_name }}</h5>
                 <hr />
-                <div class="side mt-2">
-                  <router-link to="/">
+                <router-link style="color: black; text-decoration: none" to="/">
+                  <div class="side mt-2">
                     <img
                       src="../assets/fork32.png"
                       style="max-width: 50px"
                       alt
-                    /> </router-link
-                  >Food Items
-                </div>
-                <div class="side mt-2">
-                  <router-link to="/History">
+                    />
+                    Food Items
+                  </div>
+                </router-link>
+                <router-link
+                  style="color: black; text-decoration: none"
+                  to="/History"
+                >
+                  <div class="side mt-2">
                     <img
                       src="../assets/clipboard32.png"
                       style="max-width: 50px"
                       alt
-                    /> </router-link
-                  >History
-                </div>
+                    />History
+                  </div>
+                </router-link>
                 <div
                   v-if="user.user_role === 1"
                   class="side"
@@ -216,14 +221,18 @@
 </template>
 
 <script>
+// import NavTop from '../components/_base/navTop'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'history',
-
+  components: {
+    // NavTop
+  },
   data() {
     return {
-      name: 'isal',
+      name: 'history',
+      url_API: process.env.VUE_APP_URL,
       recent: [],
       chartYear: [],
       chartMonth: [],
@@ -251,7 +260,7 @@ export default {
       this.popY = false
       axios
         .get(
-          'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=desc'
+          `${this.url_API}history?sort=history_id&limit=5&page=1&ascdsc=desc`
         )
         .then((response) => {
           const month = response.data.pagination.getMonth
