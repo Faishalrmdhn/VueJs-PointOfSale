@@ -280,7 +280,7 @@ export default {
       this.popY = true
       axios
         .get(
-          'http://127.0.0.1:3001/history?sort=history_id&limit=5&page=1&ascdsc=DESC'
+          `${this.url_API}history?sort=history_id&limit=5&page=1&ascdsc=DESC`
         )
         .then((response) => {
           const year = response.data.pagination.getYear
@@ -294,7 +294,7 @@ export default {
     },
     getTotalOrder() {
       axios
-        .get('http://127.0.0.1:3001/history/order/total')
+        .get(`${this.url_API}history/order/total`)
         .then((response) => {
           this.orders = response.data.data[0].totalOrders
         })
@@ -304,7 +304,7 @@ export default {
     },
     recentOrderHistory() {
       axios
-        .get('http://127.0.0.1:3001/history/order/recent')
+        .get(`${this.url_API}history/order/recent`)
         .then((response) => {
           // this.recent = response.data.data
           // console.log(this.recent)
