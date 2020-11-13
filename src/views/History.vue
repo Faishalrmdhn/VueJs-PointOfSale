@@ -92,7 +92,7 @@
                 <b-col sm class="container-card">
                   <div class="rect1">
                     <p>Today's Income</p>
-                    <h3>Rp.{{ todayIncome }}</h3>
+                    <h3>Rp.{{ formatPrice(todayIncome) }}</h3>
                     <p>+2% Yesterday</p>
                     <div class="decor">
                       <img src="../assets/circle.png" class="circle1" />
@@ -112,7 +112,7 @@
                   </div>
                   <div class="rect3">
                     <p>This Year Income</p>
-                    <h4>Rp. {{ yearIncome }}</h4>
+                    <h4>Rp. {{ formatPrice(yearIncome) }}</h4>
                     <p>+10% Last Year</p>
                     <div class="decor">
                       <img src="../assets/circle.png" class="circle1" />
@@ -133,7 +133,7 @@
                       </b-col>
                       <b-col cols="6" sm="2" class="text-center">
                         <b-dropdown variant="info" text="Filter By">
-                          <b-dropdown-item @click="getHistory()"
+                          <b-dropdown-item @click="getAllHistory()"
                             >Month</b-dropdown-item
                           >
                           <b-dropdown-item @click="getHistoryYear()"
@@ -240,36 +240,33 @@ export default {
       popY: false,
       yearIncome: null,
       todayIncome: 0,
-      orders: 0,
-      test: []
+      orders: 0
     }
   },
   computed: { ...mapGetters({ user: 'getUser' }) },
   created() {
-    this.getHistory()
+    this.getAllHistory()
     this.getTotalOrder()
-    this.recentOrderHistory()
+    this.todayIncomeHistory()
+    this.yearIncomeHistory()
   },
   methods: {
     ...mapActions(['logout']),
     userPage() {
       this.$router.push('/user')
     },
-    getHistory() {
+    getAllHistory() {
       this.popM = true
       this.popY = false
       axios
         .get(
-          `${this.url_API}history?sort=history_id&limit=5&page=1&ascdsc=desc`
+          `${this.url_API}history?sort=history_id&page=1&ascdsc=DESC&limit=55`
         )
         .then((response) => {
           const month = response.data.pagination.getMonth
           month.map((item) => this.chartMonth.push([item.date, item.subtotal]))
-          console.log(response.data.pagination.getMonth)
-          this.yearIncome = response.data.pagination.getYear[0].subtotal
           this.recent = response.data.data
-          this.todayIncome = response.data.pagination.getToday[0].subtotal
-          this.test = response.data
+          console.log(response)
         })
         .catch((error) => {
           console.log(error)
@@ -280,13 +277,12 @@ export default {
       this.popY = true
       axios
         .get(
-          `${this.url_API}history?sort=history_id&limit=5&page=1&ascdsc=DESC`
+          `${this.url_API}history?sort=history_id&page=1&ascdsc=DESC&limit=5`
         )
         .then((response) => {
           const year = response.data.pagination.getYear
           year.map((item) => this.chartYear.push([item.month, item.subtotal]))
-          // this.todayIncome = response.data.pagination.getToday[0].subtotal
-          // console.log(this.chartYear)
+          console.log(year)
         })
         .catch((error) => {
           console.log(error)
@@ -302,16 +298,29 @@ export default {
           console.log(error)
         })
     },
-    recentOrderHistory() {
+    todayIncomeHistory() {
       axios
-        .get(`${this.url_API}history/order/recent`)
+        .get(`${this.url_API}history/income/today`)
         .then((response) => {
-          // this.recent = response.data.data
-          // console.log(this.recent)
+          this.todayIncome = response.data.data[0].subtotal
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    yearIncomeHistory() {
+      axios
+        .get(`${this.url_API}history/income/year`)
+        .then((response) => {
+          this.yearIncome = response.data.data[0].subtotal
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     }
   }
 }
