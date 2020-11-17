@@ -1,6 +1,16 @@
 <template>
   <b-container fluid>
     <b-row>
+      <!-- <div v-for="(value, index) in recent" :key="index">
+        <div v-for="(value, index) in value.items" :key="index">
+          <ul>
+            <li>{{ value.product_name }}|||</li>
+          </ul>
+        </div>
+      </div>
+      <div v-for="(value, index) in recent" :key="index">
+        <div>{{ value.items }}</div>
+      </div> -->
       <b-col sm="12">
         <!-- <NavTop /> -->
         <!-- ---wrap icon navbar-->
@@ -161,7 +171,7 @@
               <!-- Revenue end-->
               <!-- Recent Order start-->
               <b-row class="mt5">
-                <b-col xl="12" class="mt-5">
+                <b-col xl="12" class="mt-5 table-container">
                   <div class="recent">
                     <b-row class="p-4">
                       <b-col cols="6" sm="10" class="text-left">
@@ -197,13 +207,31 @@
                             <!-- <th scope="row">1</th> -->
                             <td>#{{ value.invoice }}</td>
                             <td>PEVITA</td>
-                            <td>{{ value.history_created_at }}</td>
-                            <td>{{ value.items.product_name }}</td>
+                            <td>{{ value.history_created_at.slice(0, 19) }}</td>
+                            <td>
+                              <ul
+                                v-for="(value, index) in value.items"
+                                :key="index"
+                              >
+                                <li>{{ value.product_name }}</li>
+                              </ul>
+                            </td>
                             <td>{{ value.history_subtotal }}</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
+                    <!-- <b-row align-h="center">
+                      <b-col sm="6">
+                        <b-pagination
+                          v-model="currentPage"
+                          :total-rows="totalData"
+                          :per-page="limit"
+                          aria-controls="my-table"
+                          @change="handlePageChange"
+                        ></b-pagination>
+                      </b-col>
+                    </b-row> -->
                   </div>
                 </b-col>
               </b-row>
@@ -223,7 +251,7 @@
 <script>
 // import NavTop from '../components/_base/navTop'
 import axios from 'axios'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'history',
   components: {
@@ -233,17 +261,22 @@ export default {
     return {
       name: 'history',
       url_API: process.env.VUE_APP_URL,
-      recent: [],
       chartYear: [],
       chartMonth: [],
       popM: true,
       popY: false,
-      yearIncome: null,
-      todayIncome: 0,
-      orders: 0
+      yearIncome: null
+      // todayIncome: 0
     }
   },
-  computed: { ...mapGetters({ user: 'getUser' }) },
+  computed: {
+    ...mapGetters({
+      user: 'getUser',
+      recent: 'getHistory',
+      orders: 'getOrders',
+      todayIncome: 'getTodayIncome'
+    })
+  },
   created() {
     this.getAllHistory()
     this.getTotalOrder()
@@ -251,22 +284,19 @@ export default {
     this.yearIncomeHistory()
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'allHistory', 'totalOrder', 'todayIncomeAction']),
+    ...mapMutations(['setHistory']),
     userPage() {
       this.$router.push('/user')
     },
     getAllHistory() {
       this.popM = true
       this.popY = false
-      axios
-        .get(
-          `${this.url_API}history?sort=history_id&page=1&ascdsc=DESC&limit=55`
-        )
+      this.allHistory()
         .then((response) => {
+          console.log(response)
           const month = response.data.pagination.getMonth
           month.map((item) => this.chartMonth.push([item.date, item.subtotal]))
-          this.recent = response.data.data
-          console.log(response)
         })
         .catch((error) => {
           console.log(error)
@@ -275,10 +305,8 @@ export default {
     getHistoryYear() {
       this.popM = false
       this.popY = true
-      axios
-        .get(
-          `${this.url_API}history?sort=history_id&page=1&ascdsc=DESC&limit=5`
-        )
+
+      this.allHistory()
         .then((response) => {
           const year = response.data.pagination.getYear
           year.map((item) => this.chartYear.push([item.month, item.subtotal]))
@@ -289,24 +317,20 @@ export default {
         })
     },
     getTotalOrder() {
-      axios
-        .get(`${this.url_API}history/order/total`)
-        .then((response) => {
-          this.orders = response.data.data[0].totalOrders
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      this.totalOrder()
     },
+    // ===========================================
     todayIncomeHistory() {
-      axios
-        .get(`${this.url_API}history/income/today`)
-        .then((response) => {
-          this.todayIncome = response.data.data[0].subtotal
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      this.todayIncomeAction()
+      // axios
+      //   .get(`${this.url_API}history/income/today`)
+      //   .then((response) => {
+      //     console.log(response.data)
+      //     this.todayIncome = response.data.data[0].subtotal
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   })
     },
     yearIncomeHistory() {
       axios
@@ -321,6 +345,11 @@ export default {
     formatPrice(value) {
       const val = (value / 1).toFixed(2).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    },
+    handlePageChange(numberPage) {
+      this.$router.push(`?page=${numberPage}`)
+      this.changePage(numberPage)
+      this.getProducts()
     }
   }
 }

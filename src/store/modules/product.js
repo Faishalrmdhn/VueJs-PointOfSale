@@ -90,9 +90,6 @@ export default {
         .then(response => {
           console.log(response.data)
           context.commit('setProduct', response.data)
-          // context.state.products = response.data.data
-          // context.state.totalData = response.data.pagination.totalData
-          // context.commit('changePage', response.data.pagination.page)
         })
         .catch(error => {
           console.log(error.response)
