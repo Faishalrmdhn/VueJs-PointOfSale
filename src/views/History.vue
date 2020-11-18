@@ -1,16 +1,6 @@
 <template>
   <b-container fluid>
     <b-row>
-      <!-- <div v-for="(value, index) in recent" :key="index">
-        <div v-for="(value, index) in value.items" :key="index">
-          <ul>
-            <li>{{ value.product_name }}|||</li>
-          </ul>
-        </div>
-      </div>
-      <div v-for="(value, index) in recent" :key="index">
-        <div>{{ value.items }}</div>
-      </div> -->
       <b-col sm="12">
         <!-- <NavTop /> -->
         <!-- ---wrap icon navbar-->
@@ -199,7 +189,7 @@
                             <th scope="col">CASHIER</th>
                             <th scope="col">DATE</th>
                             <th scope="col">ORDERS</th>
-                            <th scope="col">AMOUNT</th>
+                            <th scope="col">Total</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -210,7 +200,7 @@
                             <td>{{ value.history_created_at.slice(0, 19) }}</td>
                             <td>
                               <ul
-                                v-for="(value, index) in value.items"
+                                v-for="(value, index) in value.orders"
                                 :key="index"
                               >
                                 <li>{{ value.product_name }}</li>
@@ -272,7 +262,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'getUser',
-      recent: 'getHistory',
+      recent: 'getOrderData',
       orders: 'getOrders',
       todayIncome: 'getTodayIncome'
     })
@@ -282,9 +272,16 @@ export default {
     this.getTotalOrder()
     this.todayIncomeHistory()
     this.yearIncomeHistory()
+    this.recentOrderData()
   },
   methods: {
-    ...mapActions(['logout', 'allHistory', 'totalOrder', 'todayIncomeAction']),
+    ...mapActions([
+      'logout',
+      'allHistory',
+      'totalOrder',
+      'todayIncomeAction',
+      'recentOrderData'
+    ]),
     ...mapMutations(['setHistory']),
     userPage() {
       this.$router.push('/user')
@@ -518,4 +515,10 @@ table {
   width: 100%;
   height: 100%;
 }
+
+/* optional */
+/* td,
+ul {
+  list-style-type: none;
+} */
 </style>

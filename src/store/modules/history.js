@@ -11,6 +11,7 @@ export default {
     ascdsc: 'DESC',
     orders: 0,
     todayIncome: 0,
+    orderData: [],
     // ===================
     invoice: 0,
     subTotal: 0
@@ -26,6 +27,10 @@ export default {
     setOrder(state, payload) {
       console.log(payload)
       state.orders = payload.data.data[0].totalOrders
+    },
+    setOrderData(state, payload) {
+      console.log(payload.data.data)
+      state.orderData = payload.data.data
     },
     // ==============================================================
     setTodayIncome(state, payload) {
@@ -90,6 +95,28 @@ export default {
           console.log(error)
         })
     },
+    recentOrder(context) {
+      axios
+        .get(`${process.env.VUE_APP_URL}history/order/total`)
+        .then(response => {
+          console.log(response)
+          context.commit('setOrder', response)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
+    recentOrderData(context) {
+      axios
+        .get(`${process.env.VUE_APP_URL}history/order/recent`)
+        .then(response => {
+          console.log(response)
+          context.commit('setOrderData', response)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
     // =====================================================
     searchProductStore(context) {
       axios
@@ -116,6 +143,9 @@ export default {
     },
     getOrders(state) {
       return state.orders
+    },
+    getOrderData(state) {
+      return state.orderData
     },
     getTodayIncome(state) {
       return state.todayIncome
