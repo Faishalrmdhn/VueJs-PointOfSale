@@ -197,7 +197,7 @@
                             <!-- <th scope="row">1</th> -->
                             <td>#{{ value.invoice }}</td>
                             <td>PEVITA</td>
-                            <td>{{ value.history_created_at.slice(0, 19) }}</td>
+                            <td>{{ value.history_created_at.slice(0, 10) }}</td>
                             <td>
                               <ul
                                 v-for="(value, index) in value.orders"
