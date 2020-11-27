@@ -68,6 +68,7 @@
                         img-height="185"
                         tag="article"
                         class="mb-2"
+                        @click="getId(item)"
                       >
                         <!-- pakai div dan style utk selected -->
                         <!-- <p v-if="checkCart(item)">
@@ -102,12 +103,34 @@
                           v-if="user.user_role === 1"
                           size="sm"
                           variant="outline-danger"
-                          @click="deleteProduct(item)"
+                          @click="$bvModal.show('modalDelete')"
                         >
                           <img src="../assets/delete.png" alt />
                         </b-button>
                       </b-card>
                     </b-col>
+                    <b-modal hide-footer hide-header id="modalDelete">
+                      <template
+                        >Are you sure want to delete this product?</template
+                      >
+                      <b-row class="text-center mt-5"
+                        ><b-col cols="12" md="6"
+                          ><b-button
+                            @click="deleteProduct()"
+                            block
+                            variant="danger"
+                            >Yes</b-button
+                          ></b-col
+                        ><b-col cols="12" md="6"
+                          ><b-button
+                            @click="$bvModal.hide('modalDelete')"
+                            block
+                            variant="info"
+                            >No</b-button
+                          ></b-col
+                        ></b-row
+                      ></b-modal
+                    >
                     <b-modal id="bv-modal-update" hide-footer style>
                       <template v-slot:modal-title>Update Item</template>
                       <b-form v-on:submit.prevent>
@@ -360,7 +383,7 @@ export default {
     return {
       name: 'Home',
       url_API: process.env.VUE_APP_URL,
-      // invoice: 0,
+      id: null,
       form: {
         product_name: '',
         product_price: '',
@@ -549,6 +572,13 @@ export default {
       )
 
       doc.save('pdf.pdf')
+    },
+    getId(data) {
+      this.id = data.product_id
+    },
+    deleteProduct() {
+      this.deleteProducts(this.id)
+      this.getProducts()
     }
   }
 }
